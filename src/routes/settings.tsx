@@ -5,7 +5,7 @@ import { MasterTable } from "@/components/master-table";
 import { MASTER_TABLES } from "@/lib/masters";
 
 export const Route = createFileRoute("/settings")({
-  head: () => ({ meta: [{ title: "Settings — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: SettingsPage,
 });
 
@@ -13,9 +13,9 @@ function SettingsPage() {
   return (
     <>
       <Topbar title="Settings" subtitle="Manage master data used across modules" />
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6">
         <Tabs defaultValue={MASTER_TABLES[0].key} className="space-y-4">
-          <TabsList className="flex flex-wrap h-auto">
+          <TabsList className="flex max-w-full flex-wrap h-auto">
             {MASTER_TABLES.map((m) => (
               <TabsTrigger key={m.key} value={m.key}>{m.label}</TabsTrigger>
             ))}

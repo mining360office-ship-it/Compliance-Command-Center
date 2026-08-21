@@ -15,7 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format, parseISO, differenceInCalendarDays, startOfMonth, endOfMonth, subMonths } from "date-fns";
 
 export const Route = createFileRoute("/reports")({
-  head: () => ({ meta: [{ title: "Reports & Analytics — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: ReportsAnalytics,
 });
 
@@ -146,12 +146,12 @@ function ReportsAnalytics() {
   return (
     <>
       <Topbar title="Reports & Analytics" subtitle="Cross-module regulatory intelligence and reporting" />
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="flex flex-wrap gap-2">
-              <Select value={dateRange} onValueChange={setDateRange}>
-                <SelectTrigger className="w-40">
+            <div className="flex w-full flex-wrap gap-2 sm:w-auto">
+              <div className="w-full sm:w-auto"><Select value={dateRange} onValueChange={setDateRange}>
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue placeholder="Date Range" />
                 </SelectTrigger>
                 <SelectContent>
@@ -161,9 +161,9 @@ function ReportsAnalytics() {
                   <SelectItem value="365">Last year</SelectItem>
                   <SelectItem value="all">All time</SelectItem>
                 </SelectContent>
-              </Select>
-              <Select value={selectedAuthority} onValueChange={setSelectedAuthority}>
-                <SelectTrigger className="w-48">
+              </Select></div>
+              <div className="w-full sm:w-auto"><Select value={selectedAuthority} onValueChange={setSelectedAuthority}>
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="All Authorities" />
                 </SelectTrigger>
                 <SelectContent>
@@ -172,9 +172,9 @@ function ReportsAnalytics() {
                     <SelectItem key={auth} value={auth}>{auth}</SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </Select></div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex w-full flex-col gap-2 min-[380px]:flex-row sm:w-auto">
               <Button variant="outline" onClick={() => exportReport("PDF")} className="gap-2">
                 <Download className="size-4" />
                 Export PDF
@@ -192,11 +192,11 @@ function ReportsAnalytics() {
             </div>
           ) : (
             <Tabs defaultValue="overview" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4 lg:w-auto">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="compliance">Compliance</TabsTrigger>
-                <TabsTrigger value="licenses">Licenses</TabsTrigger>
-                <TabsTrigger value="documents">Documents</TabsTrigger>
+              <TabsList className="flex w-full justify-start overflow-x-auto lg:grid lg:w-auto lg:grid-cols-4 lg:overflow-visible">
+                <TabsTrigger value="overview" className="shrink-0">Overview</TabsTrigger>
+                <TabsTrigger value="compliance" className="shrink-0">Compliance</TabsTrigger>
+                <TabsTrigger value="licenses" className="shrink-0">Licenses</TabsTrigger>
+                <TabsTrigger value="documents" className="shrink-0">Documents</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="space-y-6">
@@ -255,7 +255,7 @@ function ReportsAnalytics() {
                   </Card>
                 </div>
 
-                <Card className="p-6">
+                <Card className="p-4 sm:p-6">
                   <h3 className="text-lg font-semibold mb-4">Authority Performance Summary</h3>
                   <Table>
                     <TableHeader>
@@ -296,7 +296,7 @@ function ReportsAnalytics() {
               </TabsContent>
 
               <TabsContent value="compliance" className="space-y-6">
-                <Card className="p-6">
+                <Card className="p-4 sm:p-6">
                   <h3 className="text-lg font-semibold mb-4">Compliance Details</h3>
                   <Table>
                     <TableHeader>
@@ -342,7 +342,7 @@ function ReportsAnalytics() {
               </TabsContent>
 
               <TabsContent value="licenses" className="space-y-6">
-                <Card className="p-6">
+                <Card className="p-4 sm:p-6">
                   <h3 className="text-lg font-semibold mb-4">License Status Report</h3>
                   <Table>
                     <TableHeader>
@@ -392,9 +392,9 @@ function ReportsAnalytics() {
               </TabsContent>
 
               <TabsContent value="documents" className="space-y-6">
-                <Card className="p-6">
+                <Card className="p-4 sm:p-6">
                   <h3 className="text-lg font-semibold mb-4">Document Repository Summary</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {Object.entries(documentStats.byFolder).map(([folder, count]) => (
                       <Card key={folder} className="p-4">
                         <div className="flex items-center gap-3">
@@ -411,7 +411,7 @@ function ReportsAnalytics() {
                   </div>
                 </Card>
 
-                <Card className="p-6">
+                <Card className="p-4 sm:p-6">
                   <h3 className="text-lg font-semibold mb-4">Recent Documents</h3>
                   <Table>
                     <TableHeader>

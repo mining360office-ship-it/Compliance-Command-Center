@@ -13,6 +13,7 @@ import { Route as VaultRouteImport } from './routes/vault'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as NoticesRouteImport } from './routes/notices'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LicensesRouteImport } from './routes/licenses'
 import { Route as InspectionsRouteImport } from './routes/inspections'
 import { Route as ComplianceRouteImport } from './routes/compliance'
@@ -38,6 +39,11 @@ const ReportsRoute = ReportsRouteImport.update({
 const NoticesRoute = NoticesRouteImport.update({
   id: '/notices',
   path: '/notices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LicensesRoute = LicensesRouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/compliance': typeof ComplianceRoute
   '/inspections': typeof InspectionsRoute
   '/licenses': typeof LicensesRoute
+  '/login': typeof LoginRoute
   '/notices': typeof NoticesRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/compliance': typeof ComplianceRoute
   '/inspections': typeof InspectionsRoute
   '/licenses': typeof LicensesRoute
+  '/login': typeof LoginRoute
   '/notices': typeof NoticesRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/compliance': typeof ComplianceRoute
   '/inspections': typeof InspectionsRoute
   '/licenses': typeof LicensesRoute
+  '/login': typeof LoginRoute
   '/notices': typeof NoticesRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/inspections'
     | '/licenses'
+    | '/login'
     | '/notices'
     | '/reports'
     | '/settings'
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/inspections'
     | '/licenses'
+    | '/login'
     | '/notices'
     | '/reports'
     | '/settings'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/compliance'
     | '/inspections'
     | '/licenses'
+    | '/login'
     | '/notices'
     | '/reports'
     | '/settings'
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   ComplianceRoute: typeof ComplianceRoute
   InspectionsRoute: typeof InspectionsRoute
   LicensesRoute: typeof LicensesRoute
+  LoginRoute: typeof LoginRoute
   NoticesRoute: typeof NoticesRoute
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/notices'
       fullPath: '/notices'
       preLoaderRoute: typeof NoticesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/licenses': {
@@ -242,6 +262,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComplianceRoute: ComplianceRoute,
   InspectionsRoute: InspectionsRoute,
   LicensesRoute: LicensesRoute,
+  LoginRoute: LoginRoute,
   NoticesRoute: NoticesRoute,
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,

@@ -16,7 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMasterNames } from "@/lib/masters";
 
 export const Route = createFileRoute("/compliance")({
-  head: () => ({ meta: [{ title: "Compliance Management — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: ComplianceModule,
 });
 
@@ -381,11 +381,11 @@ function ComplianceModule() {
   return (
     <>
       <Topbar title="Compliance Management" subtitle="Track every statutory obligation across authorities" />
-      <main className="flex-1 overflow-y-auto p-6 space-y-4">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-4">
         {/* Filters bar */}
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-wrap items-end gap-3">
-            <div className="relative min-w-[220px] flex-1">
+            <div className="relative w-full min-w-0 sm:min-w-[220px] sm:flex-1">
               <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
               <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search title, authority, mine, person…" className="pl-8" />
             </div>
@@ -394,15 +394,15 @@ function ComplianceModule() {
             <FilterSelect label="Priority" value={fPriority} onChange={setFPriority} options={PRIORITIES} />
             <FilterSelect label="Mine" value={fMine} onChange={setFMine} options={MINES} />
             <FilterSelect label="Department" value={fDepartment} onChange={setFDepartment} options={DEPARTMENTS} />
-            <div>
+            <div className="w-full sm:w-auto">
               <Label className="text-xs text-muted-foreground">Due from</Label>
-              <Input type="date" value={fDueFrom} onChange={(e) => setFDueFrom(e.target.value)} className="w-[150px]" />
+              <Input type="date" value={fDueFrom} onChange={(e) => setFDueFrom(e.target.value)} className="w-full sm:w-[150px]" />
             </div>
-            <div>
+            <div className="w-full sm:w-auto">
               <Label className="text-xs text-muted-foreground">Due to</Label>
-              <Input type="date" value={fDueTo} onChange={(e) => setFDueTo(e.target.value)} className="w-[150px]" />
+              <Input type="date" value={fDueTo} onChange={(e) => setFDueTo(e.target.value)} className="w-full sm:w-[150px]" />
             </div>
-            <Button onClick={openNew} className="ml-auto">
+            <Button onClick={openNew} className="w-full sm:w-auto sm:ml-auto">
               <Plus className="size-4" /> New Compliance
             </Button>
           </div>
@@ -522,9 +522,9 @@ function ComplianceModule() {
                   />
                   <div className="text-xs text-muted-foreground">
                     {documentFile ? (
-                      <span className="inline-flex items-center gap-1.5"><Upload className="size-3.5" />{documentFile.name}</span>
+                      <span className="inline-flex max-w-full flex-wrap items-center gap-1.5"><Upload className="size-3.5" />{documentFile.name}</span>
                     ) : getComplianceDocument(editing?.documents) ? (
-                      <span className="inline-flex items-center gap-1.5"><FileText className="size-3.5" />Current: {getComplianceDocument(editing?.documents)?.name}</span>
+                      <span className="inline-flex max-w-full flex-wrap items-center gap-1.5"><FileText className="size-3.5" />Current: {getComplianceDocument(editing?.documents)?.name}</span>
                     ) : (
                       "Attach a PDF document (optional)"
                     )}
@@ -632,10 +632,10 @@ function CategoryTypeSelect({
 
 function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <Label className="text-xs text-muted-foreground">{label}</Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="w-full sm:w-[150px]"><SelectValue /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All</SelectItem>
           {options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}

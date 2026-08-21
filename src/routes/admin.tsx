@@ -19,7 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format, parseISO } from "date-fns";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Administration — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: Administration,
 });
 
@@ -226,23 +226,23 @@ function Administration() {
   return (
     <>
       <Topbar title="Administration" subtitle="Users, roles, audit, and system settings" />
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <Tabs defaultValue="users" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4 lg:w-auto">
-              <TabsTrigger value="users" className="gap-2">
+            <TabsList className="flex w-full justify-start overflow-x-auto lg:grid lg:w-auto lg:grid-cols-4 lg:overflow-visible">
+              <TabsTrigger value="users" className="gap-2 shrink-0">
                 <Users2 className="size-4" />
                 Users
               </TabsTrigger>
-              <TabsTrigger value="roles" className="gap-2">
+              <TabsTrigger value="roles" className="gap-2 shrink-0">
                 <Shield className="size-4" />
                 Roles & Permissions
               </TabsTrigger>
-              <TabsTrigger value="audit" className="gap-2">
+              <TabsTrigger value="audit" className="gap-2 shrink-0">
                 <Activity className="size-4" />
                 Audit Logs
               </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-2">
+              <TabsTrigger value="settings" className="gap-2 shrink-0">
                 <Settings className="size-4" />
                 System Settings
               </TabsTrigger>
@@ -250,22 +250,22 @@ function Administration() {
 
             <TabsContent value="users" className="space-y-6">
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-                <div className="relative">
+                <div className="relative w-full sm:w-auto">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                   <Input
                     placeholder="Search users..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="pl-9 w-64"
+                    className="pl-9 w-full sm:w-64"
                   />
                 </div>
-                <Button onClick={openCreate} className="gap-2">
+                <Button onClick={openCreate} className="gap-2 w-full sm:w-auto">
                   <Plus className="size-4" />
                   Add User
                 </Button>
               </div>
 
-              <Card className="p-6">
+              <Card className="p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">User Management</h3>
                   <Badge variant="outline">{filteredUsers.length} users</Badge>
@@ -334,13 +334,13 @@ function Administration() {
             </TabsContent>
 
             <TabsContent value="roles" className="space-y-6">
-              <Card className="p-6">
+              <Card className="p-4 sm:p-6">
                 <h3 className="text-lg font-semibold mb-4">Role-Based Access Control (RBAC)</h3>
                 <div className="space-y-4">
                   {ROLES.map((role) => (
                     <div key={role} className="border border-border rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
+                      <div className="flex flex-col items-start gap-3 mb-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
+                        <div className="flex min-w-0 items-start gap-3">
                           <Shield className="size-5 text-muted-foreground" />
                           <div>
                             <div className="font-medium">{role}</div>
@@ -373,7 +373,7 @@ function Administration() {
             </TabsContent>
 
             <TabsContent value="audit" className="space-y-6">
-              <Card className="p-6">
+              <Card className="p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">Audit Logs</h3>
                   <Badge variant="outline">{auditLogs.length} recent entries</Badge>
@@ -431,26 +431,26 @@ function Administration() {
             </TabsContent>
 
             <TabsContent value="settings" className="space-y-6">
-              <Card className="p-6">
+              <Card className="p-4 sm:p-6">
                 <h3 className="text-lg font-semibold mb-4">System Settings</h3>
                 <div className="space-y-6">
                   <div className="space-y-4">
                     <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Security</h4>
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-start gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
                         <div>
                           <div className="font-medium">Multi-Factor Authentication</div>
                           <div className="text-sm text-muted-foreground">Require MFA for all users</div>
                         </div>
                         <Switch defaultChecked={false} />
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-start gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
                         <div>
                           <div className="font-medium">Session Timeout</div>
                           <div className="text-sm text-muted-foreground">Auto-logout after inactivity</div>
                         </div>
                         <Select defaultValue="30">
-                          <SelectTrigger className="w-32">
+                          <SelectTrigger className="w-full min-[480px]:w-32">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -467,14 +467,14 @@ function Administration() {
                   <div className="space-y-4">
                     <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Notifications</h4>
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-start gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
                         <div>
                           <div className="font-medium">Email Notifications</div>
                           <div className="text-sm text-muted-foreground">Send email alerts for critical events</div>
                         </div>
                         <Switch defaultChecked={true} />
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-start gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
                         <div>
                           <div className="font-medium">Compliance Reminders</div>
                           <div className="text-sm text-muted-foreground">Automatic reminders before due dates</div>
@@ -487,13 +487,13 @@ function Administration() {
                   <div className="space-y-4">
                     <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Data Management</h4>
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-start gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
                         <div>
                           <div className="font-medium">Data Retention</div>
                           <div className="text-sm text-muted-foreground">Keep audit logs for</div>
                         </div>
                         <Select defaultValue="365">
-                          <SelectTrigger className="w-32">
+                          <SelectTrigger className="w-full min-[480px]:w-32">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -504,7 +504,7 @@ function Administration() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-start gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
                         <div>
                           <div className="font-medium">Auto Backup</div>
                           <div className="text-sm text-muted-foreground">Automatic daily backups</div>

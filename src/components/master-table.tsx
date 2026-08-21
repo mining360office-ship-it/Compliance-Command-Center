@@ -111,11 +111,11 @@ export function MasterTable({ table, label, pageSize = 10 }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative min-w-[240px] flex-1">
+        <div className="relative w-full min-w-0 sm:min-w-[240px] sm:flex-1">
           <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
           <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={`Search ${label.toLowerCase()}…`} className="pl-8" />
         </div>
-        <Button onClick={openNew}><Plus className="size-4" /> New {label}</Button>
+        <Button onClick={openNew} className="w-full sm:w-auto"><Plus className="size-4" /> New {label}</Button>
       </div>
 
       <div className="rounded-lg border border-border bg-card">
@@ -152,9 +152,9 @@ export function MasterTable({ table, label, pageSize = 10 }: Props) {
         </Table>
       </div>
 
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
+      <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <span>{filtered.length} record{filtered.length === 1 ? "" : "s"}</span>
-        <div className="flex items-center gap-2">
+        <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start">
           <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
             <ChevronLeft className="size-4" /> Prev
           </Button>

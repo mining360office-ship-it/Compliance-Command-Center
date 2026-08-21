@@ -16,7 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMasterNames } from "@/lib/masters";
 
 export const Route = createFileRoute("/notices")({
-  head: () => ({ meta: [{ title: "Notices & Violations — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: NoticesModule,
 });
 
@@ -314,10 +314,10 @@ function NoticesModule() {
   return (
     <>
       <Topbar title="Notices & Violations" subtitle="Manage show-cause, violation, and legal notices" />
-      <main className="flex-1 overflow-y-auto p-6 space-y-4">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-4">
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-wrap items-end gap-3">
-            <div className="relative min-w-[220px] flex-1">
+            <div className="relative w-full min-w-0 sm:min-w-[220px] sm:flex-1">
               <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
               <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search notice #, subject, authority, person…" className="pl-8" />
             </div>
@@ -325,15 +325,15 @@ function NoticesModule() {
             <FilterSelect label="Status" value={fStatus} onChange={setFStatus} options={STATUSES} />
             <FilterSelect label="Risk" value={fRisk} onChange={setFRisk} options={RISK_LEVELS} />
             <FilterSelect label="Mine" value={fMine} onChange={setFMine} options={MINES} />
-            <div>
+            <div className="w-full sm:w-auto">
               <Label className="text-xs text-muted-foreground">Reply due from</Label>
-              <Input type="date" value={fDueFrom} onChange={(e) => setFDueFrom(e.target.value)} className="w-[150px]" />
+              <Input type="date" value={fDueFrom} onChange={(e) => setFDueFrom(e.target.value)} className="w-full sm:w-[150px]" />
             </div>
-            <div>
+            <div className="w-full sm:w-auto">
               <Label className="text-xs text-muted-foreground">Reply due to</Label>
-              <Input type="date" value={fDueTo} onChange={(e) => setFDueTo(e.target.value)} className="w-[150px]" />
+              <Input type="date" value={fDueTo} onChange={(e) => setFDueTo(e.target.value)} className="w-full sm:w-[150px]" />
             </div>
-            <Button onClick={openNew} className="ml-auto">
+            <Button onClick={openNew} className="w-full sm:w-auto sm:ml-auto">
               <Plus className="size-4" /> New Notice
             </Button>
           </div>
@@ -454,7 +454,7 @@ function NoticesModule() {
               <Textarea rows={3} value={form.legal_remarks} onChange={(e) => setForm({ ...form, legal_remarks: e.target.value })} placeholder="Advocate notes, legal strategy…" />
             </Field>
             <Field label="Documents" className="sm:col-span-2">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <input ref={fileInputRef} type="file" multiple className="hidden" onChange={(e) => handleFileUpload(e.target.files)} />
                 <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
                   {uploading ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
@@ -537,10 +537,10 @@ function PickSelect({ value, onChange, options, placeholder }: { value: string; 
 
 function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <Label className="text-xs text-muted-foreground">{label}</Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="w-full sm:w-[150px]"><SelectValue /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All</SelectItem>
           {options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}

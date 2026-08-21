@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMasterNames } from "@/lib/masters";
 
 export const Route = createFileRoute("/calendar")({
-  head: () => ({ meta: [{ title: "Compliance Calendar — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: CalendarModule,
 });
 
@@ -184,10 +184,10 @@ function CalendarModule() {
   return (
     <>
       <Topbar title="Compliance Calendar" subtitle="All regulatory deadlines across mines & authorities" />
-      <main className="flex-1 overflow-y-auto p-6 space-y-4">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-4">
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-wrap items-end gap-3">
-            <div className="relative min-w-[220px] flex-1">
+            <div className="relative w-full min-w-0 sm:min-w-[220px] sm:flex-1">
               <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
               <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search title, authority, status…" className="pl-8" />
             </div>
@@ -200,23 +200,23 @@ function CalendarModule() {
             <FilterSelect label="Mine" value={fMine} onChange={setFMine} options={MINES.map((o) => ({ value: o, label: o }))} />
             <FilterSelect label="Authority" value={fAuthority} onChange={setFAuthority} options={AUTHORITIES.map((o) => ({ value: o, label: o }))} />
             <FilterSelect label="Status" value={fStatus} onChange={setFStatus} options={STATUSES.map((o) => ({ value: o, label: o }))} />
-            <div className="ml-auto inline-flex rounded-md border border-border overflow-hidden">
+            <div className="w-full sm:w-auto sm:ml-auto inline-flex rounded-md border border-border overflow-hidden">
               {(["month", "week", "day"] as const).map((v) => (
-                <button key={v} onClick={() => setView(v)} className={`px-3 py-1.5 text-sm capitalize ${view === v ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"}`}>{v}</button>
+                <button key={v} onClick={() => setView(v)} className={`flex-1 sm:flex-none px-3 py-2 sm:py-1.5 text-sm capitalize ${view === v ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"}`}>{v}</button>
               ))}
             </div>
           </div>
         </div>
 
         <div className="rounded-lg border border-border bg-card">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between px-4 py-3 border-b border-border">
             <div className="flex items-center gap-2">
               <Button size="icon" variant="ghost" onClick={() => shift(-1)} aria-label="Previous"><ChevronLeft className="size-4" /></Button>
               <Button size="icon" variant="ghost" onClick={() => shift(1)} aria-label="Next"><ChevronRight className="size-4" /></Button>
               <Button size="sm" variant="outline" onClick={() => setCursor(new Date())}>Today</Button>
             </div>
             <div className="font-semibold">{title}</div>
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
               {(Object.keys(KIND_META) as EventKind[]).map((k) => (
                 <span key={k} className="inline-flex items-center gap-1.5">
                   <span className={`size-2.5 rounded-full ${KIND_META[k].cls.split(" ")[0]}`} />
@@ -228,12 +228,16 @@ function CalendarModule() {
 
           {loading ? (
             <div className="p-10 text-center text-muted-foreground"><Loader2 className="size-4 animate-spin inline mr-2" /> Loading calendar…</div>
-          ) : view === "month" ? (
-            <MonthView cursor={cursor} byDate={byDate} onClickEvent={setSelected} onClickDate={openQuickEntry} />
-          ) : view === "week" ? (
-            <WeekView cursor={cursor} byDate={byDate} onClickEvent={setSelected} onClickDate={openQuickEntry} />
           ) : (
-            <DayView cursor={cursor} events={byDate.get(toYmd(cursor)) ?? []} onClickEvent={setSelected} onClickDate={openQuickEntry} />
+            <div className={view === "day" ? "min-w-0" : "max-w-full overflow-x-auto overscroll-x-contain"}>
+              {view === "month" ? (
+                <MonthView cursor={cursor} byDate={byDate} onClickEvent={setSelected} onClickDate={openQuickEntry} />
+              ) : view === "week" ? (
+                <WeekView cursor={cursor} byDate={byDate} onClickEvent={setSelected} onClickDate={openQuickEntry} />
+              ) : (
+                <DayView cursor={cursor} events={byDate.get(toYmd(cursor)) ?? []} onClickEvent={setSelected} onClickDate={openQuickEntry} />
+              )}
+            </div>
           )}
         </div>
       </main>
@@ -303,7 +307,7 @@ function MonthView({ cursor, byDate, onClickEvent, onClickDate }: { cursor: Date
   for (let i = 0; i < 42; i++) days.push(addDays(gridStart, i));
   const today = new Date();
   return (
-    <div>
+    <div className="min-w-[700px] md:min-w-0">
       <div className="grid grid-cols-7 border-b border-border text-xs font-medium text-muted-foreground">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
           <div key={d} className="px-2 py-2">{d}</div>
@@ -339,7 +343,7 @@ function WeekView({ cursor, byDate, onClickEvent, onClickDate }: { cursor: Date;
   const s = startOfWeek(cursor);
   const today = new Date();
   return (
-    <div className="grid grid-cols-7">
+    <div className="grid min-w-[700px] grid-cols-7 md:min-w-0">
       {Array.from({ length: 7 }, (_, i) => addDays(s, i)).map((d, idx) => {
         const ev = byDate.get(toYmd(d)) ?? [];
         const isToday = sameDay(d, today);
@@ -398,10 +402,10 @@ function DayView({ cursor, events, onClickEvent, onClickDate }: { cursor: Date; 
 
 function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <Label className="text-xs text-muted-foreground">{label}</Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="w-full sm:w-[150px]"><SelectValue /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All</SelectItem>
           {options.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}

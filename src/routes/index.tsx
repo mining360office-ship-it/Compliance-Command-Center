@@ -16,7 +16,7 @@ import { format, parseISO } from "date-fns";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Mining Compliance Command Center" },
+      { title: "MineCompli — Mining Compliance Management System" },
       { name: "description", content: "Compliance health, risk radar, and regulatory operations overview." },
     ],
   }),
@@ -49,7 +49,7 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
 
 function CardHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between px-5 py-4 border-b border-border">
+    <div className="flex flex-wrap items-start justify-between gap-2 px-4 sm:px-5 py-4 border-b border-border">
       <div>
         <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
         {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
@@ -80,7 +80,7 @@ function HealthGauge({ data }: { data: DashboardData }) {
           live
         </span>
       </div>
-      <div className="flex items-center gap-6 mt-4">
+      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-4">
         <div className="relative size-40 shrink-0">
           <svg viewBox="0 0 160 160" className="size-40 -rotate-90">
             <circle cx="80" cy="80" r={radius} stroke="var(--color-muted)" strokeWidth="12" fill="none" />
@@ -121,7 +121,7 @@ function ExecCards({ data }: { data: DashboardData }) {
   };
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       {data.execCards.map((c) => (
         <Link key={c.label} to={getCardRoute(c.label)} className="cursor-pointer">
           <Card className="p-4 hover:bg-muted/40 transition">
@@ -164,7 +164,7 @@ function ComplianceCalendar({ data }: { data: DashboardData }) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">{e.title}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-2">
+                  <div className="text-xs text-muted-foreground mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
                     <span className="font-mono">{e.authority}</span>
                     <Dot className="size-3" />
                     <span>{format(d, "EEEE")}</span>
@@ -307,7 +307,7 @@ function InspectionTracker({ data }: { data: DashboardData }) {
         <Link to="/inspections" className="text-xs text-primary font-medium inline-flex items-center gap-1">View all <ArrowUpRight className="size-3" /></Link>
       } />
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[640px] sm:min-w-0 text-sm">
           <thead className="bg-muted/40 text-[11px] uppercase tracking-wider text-muted-foreground">
             <tr>
               <th className="text-left font-medium px-5 py-2.5">ID / Date</th>
@@ -360,7 +360,7 @@ function MineRiskRadar({ data }: { data: DashboardData }) {
   return (
     <Card>
       <CardHeader title="Mine Risk Radar™" subtitle="Predictive risk scoring across portfolio" action={
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
           <Link to="/reports" className="text-xs text-primary font-medium inline-flex items-center gap-1">Full Report <ArrowUpRight className="size-3" /></Link>
           <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-destructive">
             <ShieldAlert className="size-3.5" /> {data.highRiskCount} mines at High risk
@@ -441,7 +441,7 @@ function Dashboard() {
   return (
     <>
       <Topbar title="Dashboard" subtitle={`Real-time regulatory posture · ${data.totalCount} compliances · ${data.mineCount} mines`} />
-      <main className="flex-1 overflow-y-auto p-6 space-y-6">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-6">
         <div className="grid xl:grid-cols-3 gap-6">
           <div className="xl:col-span-1"><HealthGauge data={data} /></div>
           <div className="xl:col-span-2"><ExecCards data={data} /></div>

@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/vault")({
-  head: () => ({ meta: [{ title: "Document Vault — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: DocumentVault,
 });
 
@@ -242,21 +242,21 @@ function DocumentVault() {
   return (
     <>
       <Topbar title="Document Vault" subtitle="Centralized regulatory document repository" />
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="flex flex-wrap gap-2">
-              <div className="relative">
+            <div className="flex w-full flex-wrap gap-2 sm:w-auto">
+              <div className="relative w-full sm:w-auto">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 <Input
                   placeholder="Search documents..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 w-64"
+                  className="pl-9 w-full sm:w-64"
                 />
               </div>
-              <Select value={fFolder} onValueChange={setFFolder}>
-                <SelectTrigger className="w-40">
+              <div className="w-full sm:w-auto"><Select value={fFolder} onValueChange={setFFolder}>
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue placeholder="All Folders" />
                 </SelectTrigger>
                 <SelectContent>
@@ -265,9 +265,9 @@ function DocumentVault() {
                     <SelectItem key={f} value={f}>{f}</SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
-              <Select value={fType} onValueChange={setFType}>
-                <SelectTrigger className="w-36">
+              </Select></div>
+              <div className="w-full sm:w-auto"><Select value={fType} onValueChange={setFType}>
+                <SelectTrigger className="w-full sm:w-36">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
@@ -276,9 +276,9 @@ function DocumentVault() {
                     <SelectItem key={t} value={t}>{t}</SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
-              <Select value={fStatus} onValueChange={setFStatus}>
-                <SelectTrigger className="w-36">
+              </Select></div>
+              <div className="w-full sm:w-auto"><Select value={fStatus} onValueChange={setFStatus}>
+                <SelectTrigger className="w-full sm:w-36">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -287,9 +287,9 @@ function DocumentVault() {
                     <SelectItem key={s} value={s}>{s}</SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </Select></div>
             </div>
-            <Button onClick={openCreate} className="gap-2">
+            <Button onClick={openCreate} className="gap-2 w-full sm:w-auto">
               <Plus className="size-4" />
               Add Document
             </Button>
@@ -403,7 +403,7 @@ function DocumentVault() {
                 placeholder="Document title"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="folder">Folder *</Label>
                 <Select value={form.folder} onValueChange={(v) => setForm({ ...form, folder: v })}>
@@ -433,13 +433,13 @@ function DocumentVault() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="file">File Upload</Label>
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2">
                 <Input
                   id="file"
                   type="file"
                   onChange={handleFileUpload}
                   disabled={uploading}
-                  className="flex-1"
+                  className="min-w-0 flex-1"
                 />
                 {uploading && <Loader2 className="size-4 animate-spin" />}
               </div>

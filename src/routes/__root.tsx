@@ -1,12 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  Outlet, Link, createRootRouteWithContext, useRouter, HeadContent, Scripts,
+  Outlet, Link, createRootRouteWithContext, useNavigate, useRouter, useRouterState, HeadContent, Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import type { Session } from "@supabase/supabase-js";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppSidebar } from "../components/app-sidebar";
+import { supabase } from "../integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -46,8 +48,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Mining Compliance Command Center — Mining Regulatory Operations" },
-      { name: "description", content: "Unified compliance, inspections, licenses, and risk monitoring for mining operations." },
+      { title: "MineCompli — Mining Compliance Management System" },
+      { name: "description", content: "MineCompli — Mining Compliance Management System" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -66,16 +68,82 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SessionLoadingScreen() {
+  return (
+    <div className="flex min-h-screen w-full items-center justify-center bg-background px-4">
+      <div className="text-center">
+        <div className="mx-auto size-8 animate-spin rounded-full border-2 border-muted border-t-primary" />
+        <p className="mt-3 text-sm text-muted-foreground">Checking session…</p>
+      </div>
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  return (
-    <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen w-full bg-background h-screen overflow-hidden">
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const [session, setSession] = useState<Session | null>(null);
+  const [authReady, setAuthReady] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    void supabase.auth.getSession()
+      .then(({ data }) => {
+        if (!active) return;
+        setSession(data.session);
+        setAuthReady(true);
+      })
+      .catch(() => {
+        if (!active) return;
+        setSession(null);
+        setAuthReady(true);
+      });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      if (!active) return;
+      setSession(nextSession);
+      setAuthReady(true);
+    });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!authReady) return;
+
+    if (!session && pathname !== "/login") {
+      void navigate({ to: "/login", replace: true });
+      return;
+    }
+
+    if (session && pathname === "/login") {
+      void navigate({ to: "/", replace: true });
+    }
+  }, [authReady, navigate, pathname, session]);
+
+  let content: ReactNode;
+
+  if (!authReady) {
+    content = <SessionLoadingScreen />;
+  } else if (pathname === "/login") {
+    content = session ? <SessionLoadingScreen /> : <Outlet />;
+  } else if (!session) {
+    content = <SessionLoadingScreen />;
+  } else {
+    content = (
+      <div className="flex min-h-dvh w-full bg-background h-dvh overflow-hidden md:min-h-screen md:h-screen">
         <AppSidebar />
-        <div className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden md:ml-64">
+        <div className="flex-1 min-w-0 max-w-full flex flex-col h-dvh overflow-hidden md:h-screen md:ml-64">
           <Outlet />
         </div>
       </div>
-    </QueryClientProvider>
-  );
+    );
+  }
+
+  return <QueryClientProvider client={queryClient}>{content}</QueryClientProvider>;
 }

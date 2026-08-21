@@ -16,7 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMasterNames } from "@/lib/masters";
 
 export const Route = createFileRoute("/inspections")({
-  head: () => ({ meta: [{ title: "Inspection Management — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: InspectionsModule,
 });
 
@@ -414,8 +414,8 @@ function InspectionsModule() {
   return (
     <>
       <Topbar title="Inspection Management" subtitle="Capture inspection observations, corrective actions and closure" />
-      <main className="flex-1 overflow-y-auto p-6 space-y-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <Counter icon={ClipboardList} label="Total" value={counters.total} />
           <Counter icon={Clock} label="Open" value={counters.open} tone="sky" />
           <Counter icon={CheckCircle2} label="Closed" value={counters.closed} tone="emerald" />
@@ -426,7 +426,7 @@ function InspectionsModule() {
 
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-wrap items-end gap-3">
-            <div className="relative min-w-[220px] flex-1">
+            <div className="relative w-full min-w-0 sm:min-w-[220px] sm:flex-1">
               <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
               <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search inspection #, authority, officer, mine…" className="pl-8" />
             </div>
@@ -434,15 +434,15 @@ function InspectionsModule() {
             <FilterSelect label="Status" value={fStatus} onChange={setFStatus} options={CLOSURE_STATUS} />
             <FilterSelect label="Severity" value={fSeverity} onChange={setFSeverity} options={SEVERITY} />
             <FilterSelect label="Mine" value={fMine} onChange={setFMine} options={MINES} />
-            <div>
+            <div className="w-full sm:w-auto">
               <Label className="text-xs text-muted-foreground">From</Label>
-              <Input type="date" value={fFrom} onChange={(e) => setFFrom(e.target.value)} className="w-[150px]" />
+              <Input type="date" value={fFrom} onChange={(e) => setFFrom(e.target.value)} className="w-full sm:w-[150px]" />
             </div>
-            <div>
+            <div className="w-full sm:w-auto">
               <Label className="text-xs text-muted-foreground">To</Label>
-              <Input type="date" value={fTo} onChange={(e) => setFTo(e.target.value)} className="w-[150px]" />
+              <Input type="date" value={fTo} onChange={(e) => setFTo(e.target.value)} className="w-full sm:w-[150px]" />
             </div>
-            <Button onClick={openNew} className="ml-auto">
+            <Button onClick={openNew} className="w-full sm:w-auto sm:ml-auto">
               <Plus className="size-4" /> New Inspection
             </Button>
           </div>
@@ -551,7 +551,7 @@ function InspectionsModule() {
               <Input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} placeholder="e.g. safety, blasting" />
             </Field>
             <Field label="Inspection Evidence" className="sm:col-span-2">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <input ref={fileInputRef} type="file" multiple className="hidden" onChange={(e) => handleInspectionUpload(e.target.files)} />
                 <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
                   {uploading ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
@@ -576,7 +576,7 @@ function InspectionsModule() {
             </Field>
 
             <div className="sm:col-span-2 border-t border-border pt-4">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-col items-start gap-2 mb-2 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
                 <h3 className="text-sm font-medium">Observations &amp; Corrective Actions</h3>
                 <Button type="button" variant="outline" size="sm" onClick={addObservation}>
                   <Plus className="size-4" /> Add Observation
@@ -720,10 +720,10 @@ function PickSelect({ value, onChange, options, placeholder }: { value: string; 
 
 function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <Label className="text-xs text-muted-foreground">{label}</Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="w-full sm:w-[150px]"><SelectValue /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All</SelectItem>
           {options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}

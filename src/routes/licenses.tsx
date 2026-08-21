@@ -16,7 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMasterNames } from "@/lib/masters";
 
 export const Route = createFileRoute("/licenses")({
-  head: () => ({ meta: [{ title: "Licenses & Permits — Mining Compliance Command Center" }] }),
+  head: () => ({ meta: [{ title: "MineCompli — Mining Compliance Management System" }] }),
   component: LicensesModule,
 });
 
@@ -338,8 +338,8 @@ function LicensesModule() {
   return (
     <>
       <Topbar title="Licenses & Permits" subtitle="Lease, EC, CTO, explosives, forest approvals" />
-      <main className="flex-1 overflow-y-auto p-6 space-y-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <main className="flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-4 gap-3">
           <StatCard label="Total" value={counts.total} />
           <StatCard label="Active" value={counts.active} tone="emerald" />
           <StatCard label="Expiring ≤ 30d" value={counts.soon} tone="amber" />
@@ -348,17 +348,17 @@ function LicensesModule() {
 
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-wrap items-end gap-3">
-            <div className="relative min-w-[220px] flex-1">
+            <div className="relative w-full min-w-0 sm:min-w-[220px] sm:flex-1">
               <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
               <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name, number, authority, mine…" className="pl-8" />
             </div>
             <FilterSelect label="Authority" value={fAuthority} onChange={setFAuthority} options={AUTHORITIES} />
             <FilterSelect label="Mine" value={fMine} onChange={setFMine} options={MINES} />
             <FilterSelect label="Status" value={fStatus} onChange={setFStatus} options={STATUSES} />
-            <div>
+            <div className="w-full sm:w-auto">
               <Label className="text-xs text-muted-foreground">Expiry</Label>
               <Select value={fExpiry} onValueChange={setFExpiry}>
-                <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-full sm:w-[150px]"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
                   <SelectItem value="expired">Expired</SelectItem>
@@ -367,7 +367,7 @@ function LicensesModule() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={openNew} className="ml-auto">
+            <Button onClick={openNew} className="w-full sm:w-auto sm:ml-auto">
               <Plus className="size-4" /> New License
             </Button>
           </div>
@@ -466,9 +466,9 @@ function LicensesModule() {
                   />
                   <div className="text-xs text-muted-foreground">
                     {documentFile ? (
-                      <span className="inline-flex items-center gap-1.5"><Upload className="size-3.5" />{documentFile.name}</span>
+                      <span className="inline-flex max-w-full flex-wrap items-center gap-1.5"><Upload className="size-3.5" />{documentFile.name}</span>
                     ) : getLicenseDocument(editing?.documents) ? (
-                      <span className="inline-flex items-center gap-1.5"><FileText className="size-3.5" />Current: {getLicenseDocument(editing?.documents)?.name}</span>
+                      <span className="inline-flex max-w-full flex-wrap items-center gap-1.5"><FileText className="size-3.5" />Current: {getLicenseDocument(editing?.documents)?.name}</span>
                     ) : (
                       "Attach a license/permit document (optional)"
                     )}
@@ -552,10 +552,10 @@ function PickSelect({ value, onChange, options, placeholder }: { value: string; 
 }
 function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
   return (
-    <div>
+    <div className="w-full sm:w-auto">
       <Label className="text-xs text-muted-foreground">{label}</Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="w-full sm:w-[150px]"><SelectValue /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All</SelectItem>
           {options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
