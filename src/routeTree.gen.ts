@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VaultRouteImport } from './routes/vault'
+import { Route as StatutoryManpowerRouteImport } from './routes/statutory-manpower'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as NoticesRouteImport } from './routes/notices'
@@ -24,6 +25,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const VaultRoute = VaultRouteImport.update({
   id: '/vault',
   path: '/vault',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatutoryManpowerRoute = StatutoryManpowerRouteImport.update({
+  id: '/statutory-manpower',
+  path: '/statutory-manpower',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/notices': typeof NoticesRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/statutory-manpower': typeof StatutoryManpowerRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/notices': typeof NoticesRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/statutory-manpower': typeof StatutoryManpowerRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/notices': typeof NoticesRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
+  '/statutory-manpower': typeof StatutoryManpowerRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/notices'
     | '/reports'
     | '/settings'
+    | '/statutory-manpower'
     | '/vault'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/notices'
     | '/reports'
     | '/settings'
+    | '/statutory-manpower'
     | '/vault'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/notices'
     | '/reports'
     | '/settings'
+    | '/statutory-manpower'
     | '/vault'
   fileRoutesById: FileRoutesById
 }
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   NoticesRoute: typeof NoticesRoute
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
+  StatutoryManpowerRoute: typeof StatutoryManpowerRoute
   VaultRoute: typeof VaultRoute
 }
 
@@ -180,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/vault'
       fullPath: '/vault'
       preLoaderRoute: typeof VaultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/statutory-manpower': {
+      id: '/statutory-manpower'
+      path: '/statutory-manpower'
+      fullPath: '/statutory-manpower'
+      preLoaderRoute: typeof StatutoryManpowerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoticesRoute: NoticesRoute,
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
+  StatutoryManpowerRoute: StatutoryManpowerRoute,
   VaultRoute: VaultRoute,
 }
 export const routeTree = rootRouteImport

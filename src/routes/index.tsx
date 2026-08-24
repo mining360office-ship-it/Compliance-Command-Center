@@ -1,7 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Topbar } from "@/components/topbar";
 import { useDashboardData, type DashboardData } from "@/lib/dashboard-data";
-import { Link } from "@tanstack/react-router";
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   LineChart, Line, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
@@ -301,6 +300,8 @@ function LicenseStatusChart({ data }: { data: DashboardData }) {
 }
 
 function InspectionTracker({ data }: { data: DashboardData }) {
+  const navigate = useNavigate();
+
   return (
     <Card>
       <CardHeader title="Inspection Tracker" subtitle="Recent regulatory visits" action={
@@ -322,31 +323,41 @@ function InspectionTracker({ data }: { data: DashboardData }) {
               <tr><td colSpan={5} className="px-5 py-6 text-xs text-muted-foreground text-center">No inspection records</td></tr>
             )}
             {data.inspections.map((i) => (
-              <Link key={i.id} to="/inspections" className="block">
-                <tr className="hover:bg-muted/40 cursor-pointer">
-                  <td className="px-5 py-3">
-                    <div className="font-mono text-xs">{i.id}</div>
-                    <div className="text-[11px] text-muted-foreground">{format(parseISO(i.date), "dd MMM")}</div>
-                  </td>
-                  <td className="px-3 py-3 text-xs font-medium">{i.authority}</td>
-                  <td className="px-3 py-3">
-                    <div className="truncate max-w-[180px]">{i.mine}</div>
-                    <div className="text-[11px] text-muted-foreground">{i.obs} observations</div>
-                  </td>
-                  <td className="px-3 py-3">
-                    <span className={`text-[11px] font-medium px-2 py-0.5 rounded ring-1 ${
-                      i.severity === "Critical" ? toneClass.destructive :
-                      i.severity === "High" ? toneClass.warning :
-                      i.severity === "Medium" ? toneClass.info : "text-muted-foreground bg-muted ring-border"
-                    }`}>{i.severity}</span>
-                  </td>
-                  <td className="px-5 py-3 text-right">
-                    <span className={`text-[11px] font-medium ${
-                      i.status === "Open" ? "text-destructive" : i.status === "In Progress" ? "text-warning" : "text-success"
-                    }`}>{i.status}</span>
-                  </td>
-                </tr>
-              </Link>
+              <tr
+                key={i.id}
+                className="hover:bg-muted/40 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                onClick={() => void navigate({ to: "/inspections" })}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    void navigate({ to: "/inspections" });
+                  }
+                }}
+                tabIndex={0}
+                aria-label={`Open inspections for ${i.mine}`}
+              >
+                <td className="px-5 py-3">
+                  <div className="font-mono text-xs">{i.id}</div>
+                  <div className="text-[11px] text-muted-foreground">{format(parseISO(i.date), "dd MMM")}</div>
+                </td>
+                <td className="px-3 py-3 text-xs font-medium">{i.authority}</td>
+                <td className="px-3 py-3">
+                  <div className="truncate max-w-[180px]">{i.mine}</div>
+                  <div className="text-[11px] text-muted-foreground">{i.obs} observations</div>
+                </td>
+                <td className="px-3 py-3">
+                  <span className={`text-[11px] font-medium px-2 py-0.5 rounded ring-1 ${
+                    i.severity === "Critical" ? toneClass.destructive :
+                    i.severity === "High" ? toneClass.warning :
+                    i.severity === "Medium" ? toneClass.info : "text-muted-foreground bg-muted ring-border"
+                  }`}>{i.severity}</span>
+                </td>
+                <td className="px-5 py-3 text-right">
+                  <span className={`text-[11px] font-medium ${
+                    i.status === "Open" ? "text-destructive" : i.status === "In Progress" ? "text-warning" : "text-success"
+                  }`}>{i.status}</span>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

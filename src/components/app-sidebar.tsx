@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard, CalendarDays, ShieldCheck, FileWarning, ClipboardCheck,
-  KeyRound, FolderLock, BarChart3, Settings, Users2, Mountain, Menu,
+  KeyRound, FolderLock, BarChart3, Settings, Users2, Mountain, Menu, HardHat,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
@@ -13,6 +13,7 @@ const nav = [
   { to: "/notices", label: "Notices & Violations", icon: FileWarning },
   { to: "/inspections", label: "Inspection Management", icon: ClipboardCheck },
   { to: "/licenses", label: "Licenses & Permits", icon: KeyRound },
+  { to: "/statutory-manpower", label: "Statutory Manpower", icon: HardHat },
   { to: "/vault", label: "Document Vault", icon: FolderLock },
   { to: "/reports", label: "Reports & Analytics", icon: BarChart3 },
   { to: "/settings", label: "Settings", icon: Settings },
